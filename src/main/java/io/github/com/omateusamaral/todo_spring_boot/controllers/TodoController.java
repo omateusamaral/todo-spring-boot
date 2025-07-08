@@ -31,4 +31,13 @@ public class TodoController {
         return ResponseEntity.ok(todoService.listTodos(queryParams, pageable, completed));
     }
 
+    @GetMapping("/{todoId}")
+    public ResponseEntity<Todo> getTodo(@PathVariable("todoId") String todoId){
+        return ResponseEntity.ok(todoService.getTodo(todoId));
+    }
+    @DeleteMapping("/{todoId}")
+    public ResponseEntity<Void> deleteTodo(@PathVariable("todoId") String todoId) {
+        todoService.deleteTodo(todoId);
+        return ResponseEntity.noContent().build();
+    }
 }

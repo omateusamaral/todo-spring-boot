@@ -7,8 +7,10 @@ import io.github.com.omateusamaral.todo_spring_boot.specifications.TodoSpecifica
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class TodoService {
@@ -36,4 +38,15 @@ public class TodoService {
                 : todoRepository.findAll(todoSpecification, pageable);
 
     }
+
+        public Todo getTodo(String todoId){
+            return todoRepository.findById(todoId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Todo not found with id: " + todoId));
+        }
+
+        public void deleteTodo(String todoId){
+        Todo  todo = this.getTodo(todoId);
+        todoRepository.deleteById(todo.getTodoId());
+        }
 }
