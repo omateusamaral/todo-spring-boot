@@ -1,9 +1,12 @@
 package io.github.com.omateusamaral.todo_spring_boot.services;
 
 import io.github.com.omateusamaral.todo_spring_boot.dtos.ListTodoDTO;
+import io.github.com.omateusamaral.todo_spring_boot.dtos.UpdateTodoDTO;
 import io.github.com.omateusamaral.todo_spring_boot.entities.Todo;
+import io.github.com.omateusamaral.todo_spring_boot.mappers.TodoMapper;
 import io.github.com.omateusamaral.todo_spring_boot.repositories.TodoRepository;
 import io.github.com.omateusamaral.todo_spring_boot.specifications.TodoSpecifications;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,4 +52,15 @@ public class TodoService {
         Todo  todo = this.getTodo(todoId);
         todoRepository.deleteById(todo.getTodoId());
         }
+
+    public Todo updateTodo(String todoId, UpdateTodoDTO todoToUpdate) {
+        Todo todo = this.getTodo(todoId);
+
+        TodoMapper mapper = Mappers.getMapper(TodoMapper.class);
+        mapper.updateFromDto(todoToUpdate, todo);
+        System.out.println(todoToUpdate.getTitle() + todoToUpdate.getDescription() +  todo.getTitle());
+
+        return todoRepository.save(todo);
+    }
+
 }

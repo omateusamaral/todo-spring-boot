@@ -2,6 +2,7 @@ package io.github.com.omateusamaral.todo_spring_boot.controllers;
 
 import io.github.com.omateusamaral.todo_spring_boot.dtos.ListTodoDTO;
 import io.github.com.omateusamaral.todo_spring_boot.dtos.TodoDTO;
+import io.github.com.omateusamaral.todo_spring_boot.dtos.UpdateTodoDTO;
 import io.github.com.omateusamaral.todo_spring_boot.entities.Todo;
 import io.github.com.omateusamaral.todo_spring_boot.services.TodoService;
 import jakarta.validation.Valid;
@@ -35,9 +36,19 @@ public class TodoController {
     public ResponseEntity<Todo> getTodo(@PathVariable("todoId") String todoId){
         return ResponseEntity.ok(todoService.getTodo(todoId));
     }
+
     @DeleteMapping("/{todoId}")
     public ResponseEntity<Void> deleteTodo(@PathVariable("todoId") String todoId) {
         todoService.deleteTodo(todoId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{todoId}")
+    public ResponseEntity<Todo> updateTodo(
+            @PathVariable String todoId,
+            @RequestBody @Valid UpdateTodoDTO todoToUpdate
+    ) {
+        Todo updated = todoService.updateTodo(todoId, todoToUpdate);
+        return ResponseEntity.ok(updated);
     }
 }
